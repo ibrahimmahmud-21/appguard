@@ -6,32 +6,32 @@
 
 @layer base {
   :root {
-    --background: 220 20% 7%;
+    --background: 220 20% 4%;
     --foreground: 210 20% 92%;
 
-    --card: 220 18% 10%;
+    --card: 220 18% 8%;
     --card-foreground: 210 20% 92%;
 
-    --popover: 220 18% 10%;
+    --popover: 220 18% 8%;
     --popover-foreground: 210 20% 92%;
 
     --primary: 142 72% 50%;
-    --primary-foreground: 220 20% 7%;
+    --primary-foreground: 220 20% 4%;
 
     --secondary: 200 100% 50%;
-    --secondary-foreground: 220 20% 7%;
+    --secondary-foreground: 220 20% 4%;
 
-    --muted: 220 16% 14%;
+    --muted: 220 16% 12%;
     --muted-foreground: 215 15% 55%;
 
     --accent: 200 100% 50%;
-    --accent-foreground: 220 20% 7%;
+    --accent-foreground: 220 20% 4%;
 
     --destructive: 0 72% 55%;
     --destructive-foreground: 210 20% 98%;
 
-    --border: 220 16% 16%;
-    --input: 220 16% 16%;
+    --border: 220 16% 14%;
+    --input: 220 16% 14%;
     --ring: 142 72% 50%;
 
     --radius: 0.75rem;
@@ -40,17 +40,17 @@
     --neon-blue: 200 100% 50%;
     --neon-green-glow: 0 0 20px hsl(142 72% 50% / 0.4);
     --neon-blue-glow: 0 0 20px hsl(200 100% 50% / 0.4);
-    --surface-elevated: 220 18% 12%;
+    --surface-elevated: 220 18% 10%;
     --warning: 38 92% 50%;
-    --warning-foreground: 220 20% 7%;
+    --warning-foreground: 220 20% 4%;
 
-    --sidebar-background: 220 18% 10%;
+    --sidebar-background: 220 18% 8%;
     --sidebar-foreground: 210 20% 92%;
     --sidebar-primary: 142 72% 50%;
-    --sidebar-primary-foreground: 220 20% 7%;
-    --sidebar-accent: 220 16% 14%;
+    --sidebar-primary-foreground: 220 20% 4%;
+    --sidebar-accent: 220 16% 12%;
     --sidebar-accent-foreground: 210 20% 92%;
-    --sidebar-border: 220 16% 16%;
+    --sidebar-border: 220 16% 14%;
     --sidebar-ring: 142 72% 50%;
   }
 }
@@ -67,17 +67,48 @@
 
 @layer utilities {
   .glow-green {
-    box-shadow: var(--neon-green-glow);
+    box-shadow: 0 0 20px hsl(142 72% 50% / 0.3), 0 0 60px hsl(142 72% 50% / 0.1);
   }
   .glow-blue {
-    box-shadow: var(--neon-blue-glow);
+    box-shadow: 0 0 20px hsl(200 100% 50% / 0.3), 0 0 60px hsl(200 100% 50% / 0.1);
+  }
+  .glow-green-intense {
+    box-shadow: 0 0 20px hsl(142 72% 50% / 0.4), 0 0 60px hsl(142 72% 50% / 0.2), 0 0 100px hsl(142 72% 50% / 0.1);
   }
   .text-glow-green {
-    text-shadow: 0 0 20px hsl(142 72% 50% / 0.5);
+    text-shadow: 0 0 20px hsl(142 72% 50% / 0.5), 0 0 40px hsl(142 72% 50% / 0.2);
   }
   .text-glow-blue {
-    text-shadow: 0 0 20px hsl(200 100% 50% / 0.5);
+    text-shadow: 0 0 20px hsl(200 100% 50% / 0.5), 0 0 40px hsl(200 100% 50% / 0.2);
   }
+
+  /* Glassmorphism */
+  .glass {
+    background: hsl(220 18% 8% / 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(220 16% 20% / 0.4);
+  }
+  .glass-strong {
+    background: hsl(220 18% 8% / 0.8);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid hsl(220 16% 24% / 0.5);
+  }
+  .glass-green {
+    background: hsl(142 72% 50% / 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(142 72% 50% / 0.15);
+  }
+  .glass-blue {
+    background: hsl(200 100% 50% / 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(200 100% 50% / 0.15);
+  }
+
+  /* Gradient border */
   .gradient-border {
     border: 1px solid transparent;
     background-clip: padding-box;
@@ -95,4 +126,44 @@
     -webkit-mask-composite: xor;
     mask-composite: exclude;
   }
+
+  /* Cyber grid background */
+  .cyber-grid {
+    background-image:
+      linear-gradient(hsl(142 72% 50% / 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(142 72% 50% / 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}
+
+/* Animated background grid */
+@keyframes grid-scroll {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(40px); }
+}
+
+/* Floating particles */
+@keyframes float-particle {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+}
+
+/* Radar sweep */
+@keyframes radar-sweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Scan pulse */
+@keyframes scan-pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+/* Risk meter fill */
+@keyframes meter-fill {
+  0% { stroke-dashoffset: 283; }
 }

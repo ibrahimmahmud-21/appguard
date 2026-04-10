@@ -84,12 +84,24 @@ export default {
           to: { height: "0" },
         },
         "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 20px hsl(142 72% 50% / 0.3)" },
-          "50%": { boxShadow: "0 0 40px hsl(142 72% 50% / 0.6)" },
+          "0%, 100%": { boxShadow: "0 0 20px hsl(142 72% 50% / 0.3), 0 0 60px hsl(142 72% 50% / 0.1)" },
+          "50%": { boxShadow: "0 0 30px hsl(142 72% 50% / 0.5), 0 0 80px hsl(142 72% 50% / 0.2)" },
         },
         "scan-line": {
           "0%": { transform: "translateY(-100%)" },
           "100%": { transform: "translateY(100%)" },
+        },
+        "border-glow": {
+          "0%, 100%": { borderColor: "hsl(142 72% 50% / 0.2)" },
+          "50%": { borderColor: "hsl(142 72% 50% / 0.5)" },
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "shimmer": {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
         },
       },
       animation: {
@@ -97,6 +109,9 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
         "scan-line": "scan-line 1.5s ease-in-out infinite",
+        "border-glow": "border-glow 2s ease-in-out infinite",
+        "float": "float 3s ease-in-out infinite",
+        "shimmer": "shimmer 2s linear infinite",
       },
     },
   },
