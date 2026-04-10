@@ -1,67 +1,34 @@
 import { motion } from "framer-motion";
 import { ShieldCheck, ShieldAlert, ShieldX, AlertTriangle, ArrowLeft, Bot, ChevronRight } from "lucide-react";
+import type { ScanResult as ScanResultType } from "@/lib/apkScanner";
 
 interface ScanResultProps {
+  result: ScanResultType;
   fileName: string;
   onScanAnother: () => void;
 }
 
-const generateResult = (fileName: string) => {
-  const hash = fileName.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
-  const score = (hash % 10) + 1;
-
-  const allReasons = [
-    { text: "Requests SMS read/send permissions", severity: "high" as const },
-    { text: "Contains obfuscated code segments", severity: "high" as const },
-    { text: "Connects to known tracking domains", severity: "medium" as const },
-    { text: "Requests camera access without visible feature", severity: "medium" as const },
-    { text: "Accesses contacts and call logs", severity: "high" as const },
-    { text: "Contains embedded advertisement SDKs", severity: "low" as const },
-    { text: "Requests device admin privileges", severity: "high" as const },
-    { text: "Uses reflection to hide API calls", severity: "medium" as const },
-  ];
-
-  const reasonCount = Math.min(Math.max(Math.floor(score / 2), 1), 5);
-  const reasons = allReasons.slice(0, reasonCount);
-
-  let level: "safe" | "medium" | "high";
-  if (score <= 3) level = "safe";
-  else if (score <= 6) level = "medium";
-  else level = "high";
-
-  const explanations: Record<string, string> = {
-    safe: `I've completed a thorough analysis of "${fileName}". The APK appears clean with no significant security concerns. All requested permissions align with the app's expected functionality. No known malware signatures or suspicious network endpoints were detected.`,
-    medium: `After scanning "${fileName}", I found some concerning elements. The app requests permissions that seem excessive for its stated purpose. I detected connections to tracking services. While not definitively malicious, I'd recommend caution before installing.`,
-    high: `⚠️ Critical alert for "${fileName}". Multiple high-severity threats detected. The APK contains obfuscated code commonly associated with malware, requests dangerous permissions, and connects to known malicious endpoints. I strongly advise against installing this application.`,
-  };
-
-  return { score, level, reasons, explanation: explanations[level] };
-};
-
 const levelConfig = {
-  safe: {
+  Safe: {
     icon: ShieldCheck,
     label: "SECURE",
     color: "text-neon-green",
     strokeColor: "hsl(142 72% 50%)",
     bgGlow: "bg-neon-green/5",
-    borderColor: "border-neon-green/20",
   },
-  medium: {
+  "Medium Risk": {
     icon: ShieldAlert,
     label: "CAUTION",
     color: "text-warning",
     strokeColor: "hsl(38 92% 50%)",
     bgGlow: "bg-warning/5",
-    borderColor: "border-warning/20",
   },
-  high: {
+  Risky: {
     icon: ShieldX,
     label: "THREAT DETECTED",
     color: "text-destructive",
     strokeColor: "hsl(0 72% 55%)",
     bgGlow: "bg-destructive/5",
-    borderColor: "border-destructive/20",
   },
 };
 
@@ -71,15 +38,13 @@ const severityColors = {
   high: "bg-destructive",
 };
 
-const ScanResult = ({ fileName, onScanAnother }: ScanResultProps) => {
-  const result = generateResult(fileName);
-  const config = levelConfig[result.level];
+const ScanResult = ({ result, fileName, onScanAnother }: ScanResultProps) => {
+  const config = levelConfig[result.status];
   const circumference = 2 * Math.PI * 45;
   const fillAmount = (result.score / 10) * circumference;
 
   return (
     <section className="pt-32 pb-20 relative">
-      {/* Background glow */}
       <div className={`absolute top-20 left-1/2 -translate-x-1/2 w-[500px] h-[500px] ${config.bgGlow} rounded-full blur-[120px] pointer-events-none`} />
 
       <div className="container max-w-2xl relative z-10">
@@ -90,7 +55,6 @@ const ScanResult = ({ fileName, onScanAnother }: ScanResultProps) => {
           transition={{ duration: 0.6 }}
           className="glass rounded-2xl p-8 text-center mb-6"
         >
-          {/* Circular meter */}
           <div className="relative w-48 h-48 mx-auto mb-6">
             <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
               <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(220 16% 14%)" strokeWidth="3" />
@@ -108,9 +72,7 @@ const ScanResult = ({ fileName, onScanAnother }: ScanResultProps) => {
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className={`text-4xl font-bold font-mono ${config.color}`}>
-                {result.score}
-              </span>
+              <span className={`text-4xl font-bold font-mono ${config.color}`}>{result.score}</span>
               <span className="text-xs text-muted-foreground font-mono">/10 RISK</span>
             </div>
           </div>
@@ -119,13 +81,10 @@ const ScanResult = ({ fileName, onScanAnother }: ScanResultProps) => {
             <config.icon className="h-5 w-5" />
             {config.label}
           </div>
-
-          <p className="text-xs text-muted-foreground font-mono mt-3 truncate">
-            TARGET: {fileName}
-          </p>
+          <p className="text-xs text-muted-foreground font-mono mt-3 truncate">TARGET: {fileName}</p>
         </motion.div>
 
-        {/* Findings cards */}
+        {/* Findings */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -160,7 +119,7 @@ const ScanResult = ({ fileName, onScanAnother }: ScanResultProps) => {
           </div>
         </motion.div>
 
-        {/* AI Explanation chat box */}
+        {/* AI Explanation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -173,18 +132,11 @@ const ScanResult = ({ fileName, onScanAnother }: ScanResultProps) => {
             </div>
             <div>
               <span className="text-sm font-semibold">AI Analysis</span>
-              <span className="text-[10px] text-muted-foreground ml-2 font-mono">GPT-GUARD v2.4</span>
+              <span className="text-[10px] text-muted-foreground ml-2 font-mono">CLIENT-SIDE SCAN</span>
             </div>
           </div>
           <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="text-sm text-muted-foreground leading-relaxed"
-            >
-              {result.explanation}
-            </motion.p>
+            <p className="text-sm text-muted-foreground leading-relaxed">{result.explanations}</p>
           </div>
         </motion.div>
 
