@@ -8,45 +8,46 @@ const steps = [
 ];
 
 const HowItWorks = () => (
-  <section id="how-it-works" className="py-24 relative">
+  <section id="how-it-works" className="py-24 relative border-t border-border/40">
     <div className="container relative z-10">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-center mb-16"
+        transition={{ duration: 0.5 }}
+        className="text-center mb-14"
       >
-        <span className="text-xs font-mono text-neon-blue tracking-widest uppercase mb-4 block">
-          // process
+        <span className="text-[11px] font-mono text-neon-green/80 tracking-[0.2em] uppercase mb-4 block">
+          Process
         </span>
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          How It <span className="text-neon-blue text-glow-blue">Works</span>
+        <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
+          How It <span className="text-neon-green">Works</span>
         </h2>
       </motion.div>
 
       <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto relative">
-        {/* Connecting line */}
-        <div className="hidden md:block absolute top-12 left-[20%] right-[20%] h-[1px] bg-gradient-to-r from-neon-green/20 via-neon-blue/20 to-neon-green/20" />
+        {/* Connecting hairline */}
+        <div className="hidden md:block absolute top-10 left-[16%] right-[16%] h-px bg-border" />
 
         {steps.map((s, i) => (
           <motion.div
             key={s.title}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.15 }}
-            className="text-center relative"
+            transition={{ delay: i * 0.12, duration: 0.4 }}
+            className="text-center relative group"
           >
-            <div className="relative w-24 h-24 mx-auto mb-6">
-              <div className="w-full h-full rounded-2xl glass flex items-center justify-center group hover:glow-blue transition-all duration-500">
-                <s.icon className="h-8 w-8 text-neon-blue" />
+            <div className="relative w-20 h-20 mx-auto mb-5">
+              <div className="w-full h-full rounded-2xl bg-card border border-border/60 flex items-center justify-center group-hover:border-neon-green/40 group-hover:bg-neon-green/5 transition-all duration-300">
+                <s.icon className="h-7 w-7 text-neon-green" strokeWidth={1.8} />
               </div>
-              <span className="absolute -top-2 -right-2 w-7 h-7 rounded-lg bg-neon-blue text-primary-foreground text-xs font-mono font-bold flex items-center justify-center glow-blue">
+              <span className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-md bg-neon-green text-primary-foreground text-[10px] font-mono font-bold flex items-center justify-center">
                 {s.num}
               </span>
             </div>
-            <h3 className="text-lg font-semibold mb-2">{s.title}</h3>
-            <p className="text-sm text-muted-foreground">{s.description}</p>
+            <h3 className="text-lg font-semibold mb-2 tracking-tight">{s.title}</h3>
+            <p className="text-sm text-muted-foreground max-w-[220px] mx-auto">{s.description}</p>
           </motion.div>
         ))}
       </div>
