@@ -1,1 +1,4 @@
 project_id = "cygwxjslxygubosxfjcb"
+
+[functions.scan-apk]
+verify_jwt = false
