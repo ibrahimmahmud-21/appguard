@@ -23,19 +23,8 @@ const HeroSection = ({ onFileSelect }: { onFileSelect: (file: File) => void }) =
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="text-center max-w-3xl mx-auto mb-14"
+        className="text-center max-w-3xl mx-auto mb-14 mt-6"
       >
-        {/* Terminal-style label */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-8 text-xs font-mono text-neon-green"
-        >
-          <span className="w-2 h-2 rounded-full bg-neon-green animate-pulse" />
-          SYSTEM ONLINE
-        </motion.div>
-
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.1] tracking-tight">
           Scan APK Before{" "}
           <span className="text-neon-green text-glow-green">You Install</span>
