@@ -1,19 +1,36 @@
 import { useState, useCallback } from "react";
 import { Upload, FileArchive, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "@/hooks/use-toast";
 
 interface UploadBoxProps {
   onFileSelect: (file: File) => void;
 }
+
+const MAX_SIZE = 100 * 1024 * 1024; // 100MB
 
 const UploadBox = ({ onFileSelect }: UploadBoxProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleFile = useCallback((file: File) => {
-    if (file.name.endsWith(".apk")) {
-      setSelectedFile(file);
+    if (!file.name.toLowerCase().endsWith(".apk")) {
+      toast({
+        title: "ভুল ফাইল ভাই 😅",
+        description: "শুধু .apk ফাইল আপলোড করো।",
+        variant: "destructive",
+      });
+      return;
     }
+    if (file.size > MAX_SIZE) {
+      toast({
+        title: "ফাইল অনেক বড় 📦",
+        description: "সর্বোচ্চ 100MB সাইজের APK দেওয়া যাবে।",
+        variant: "destructive",
+      });
+      return;
+    }
+    setSelectedFile(file);
   }, []);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
@@ -99,7 +116,7 @@ const UploadBox = ({ onFileSelect }: UploadBoxProps) => {
                 </div>
                 <div>
                   <p className="text-foreground font-semibold">Drag & drop your APK file here</p>
-                  <p className="text-sm text-muted-foreground mt-1">or click to browse • .apk files only</p>
+                  <p className="text-sm text-muted-foreground mt-1">or click to browse • .apk only • max 100MB</p>
                 </div>
                 <input
                   type="file"
