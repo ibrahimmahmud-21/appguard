@@ -4,10 +4,9 @@ import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import HowItWorks from "@/components/HowItWorks";
 import Footer from "@/components/Footer";
-import ScanResult from "@/components/ScanResult";
+import ScanResult, { type VtVerdict } from "@/components/ScanResult";
 import ScanningAnimation from "@/components/ScanningAnimation";
 import ParticleBackground from "@/components/ParticleBackground";
-import { scanApkContent, readFileAsText, type ScanResult as ScanResultType } from "@/lib/apkScanner";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
@@ -17,22 +16,22 @@ type ScanPhase = "uploading" | "scanning" | "done";
 const Index = () => {
   const [view, setView] = useState<ViewState>("home");
   const [fileName, setFileName] = useState("");
-  const [scanResult, setScanResult] = useState<ScanResultType | null>(null);
   const [phase, setPhase] = useState<ScanPhase>("uploading");
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [vtReport, setVtReport] = useState<any>(null);
+  const [verdict, setVerdict] = useState<VtVerdict | null>(null);
+  const [aiExplanation, setAiExplanation] = useState<string>("");
 
   const handleFileSelect = useCallback(async (file: File) => {
     setFileName(file.name);
     setView("scanning");
     setPhase("uploading");
     setUploadProgress(0);
-    setVtReport(null);
+    setVerdict(null);
+    setAiExplanation("");
 
     const path = `${crypto.randomUUID()}-${file.name}`;
 
     try {
-      // Simulated progress while uploading (Supabase JS doesn't expose progress events)
       const fakeTimer = setInterval(() => {
         setUploadProgress((p) => Math.min(p + 5, 90));
       }, 200);
@@ -49,14 +48,8 @@ const Index = () => {
 
       if (upErr) throw upErr;
 
-      // Local quick scan for fallback display
-      const text = await readFileAsText(file);
-      const localResult = scanApkContent(text, file.name);
-      setScanResult(localResult);
-
       setPhase("scanning");
 
-      // Call VirusTotal edge function
       const { data, error } = await supabase.functions.invoke("scan-apk", {
         body: { storagePath: path },
       });
@@ -67,10 +60,31 @@ const Index = () => {
           description: error.message ?? "একটু পরে আবার চেষ্টা করো।",
           variant: "destructive",
         });
-      } else {
-        setVtReport(data);
+        setView("home");
+        return;
       }
 
+      if (data?.status === "pending") {
+        toast({
+          title: "স্ক্যান এখনো চলছে ⏳",
+          description: data.message ?? "একটু পরে আবার চেষ্টা করো।",
+        });
+        setView("home");
+        return;
+      }
+
+      if (data?.error) {
+        toast({
+          title: "সমস্যা হয়েছে",
+          description: data.error,
+          variant: "destructive",
+        });
+        setView("home");
+        return;
+      }
+
+      setVerdict(data?.verdict ?? null);
+      setAiExplanation(data?.aiExplanation ?? "");
       setPhase("done");
     } catch (e: any) {
       toast({
@@ -89,8 +103,8 @@ const Index = () => {
   const handleScanAnother = useCallback(() => {
     setView("home");
     setFileName("");
-    setScanResult(null);
-    setVtReport(null);
+    setVerdict(null);
+    setAiExplanation("");
     setPhase("uploading");
     setUploadProgress(0);
   }, []);
@@ -106,8 +120,13 @@ const Index = () => {
           uploadProgress={uploadProgress}
           onComplete={handleScanComplete}
         />
-      ) : view === "result" && scanResult ? (
-        <ScanResult result={scanResult} fileName={fileName} onScanAnother={handleScanAnother} />
+      ) : view === "result" && verdict ? (
+        <ScanResult
+          verdict={verdict}
+          aiExplanation={aiExplanation}
+          fileName={fileName}
+          onScanAnother={handleScanAnother}
+        />
       ) : (
         <>
           <HeroSection onFileSelect={handleFileSelect} />

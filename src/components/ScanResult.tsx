@@ -1,47 +1,57 @@
 import { motion } from "framer-motion";
-import { ShieldCheck, ShieldAlert, ShieldX, AlertTriangle, ArrowLeft, Bot, ChevronRight } from "lucide-react";
-import type { ScanResult as ScanResultType } from "@/lib/apkScanner";
+import { ShieldCheck, ShieldAlert, ShieldX, AlertTriangle, ArrowLeft, Bot, Link2, KeyRound } from "lucide-react";
+
+export interface VtVerdict {
+  level: "LOW" | "MEDIUM" | "HIGH";
+  label: string;
+  score: number;
+  summary: string;
+  detection: { malicious: number; suspicious: number; total: number; engines: string[] };
+  dangerousPermissions: string[];
+  mediumPermissions: string[];
+  suspiciousUrls: string[];
+  behaviors: string[];
+}
 
 interface ScanResultProps {
-  result: ScanResultType;
+  verdict: VtVerdict;
+  aiExplanation: string;
   fileName: string;
   onScanAnother: () => void;
 }
 
 const levelConfig = {
-  Safe: {
+  LOW: {
     icon: ShieldCheck,
-    label: "SECURE",
     color: "text-neon-green",
     strokeColor: "hsl(142 72% 50%)",
     bgGlow: "bg-neon-green/5",
+    chip: "bg-neon-green/10 text-neon-green",
   },
-  "Medium Risk": {
+  MEDIUM: {
     icon: ShieldAlert,
-    label: "CAUTION",
     color: "text-warning",
     strokeColor: "hsl(38 92% 50%)",
     bgGlow: "bg-warning/5",
+    chip: "bg-warning/10 text-warning",
   },
-  Risky: {
+  HIGH: {
     icon: ShieldX,
-    label: "THREAT DETECTED",
     color: "text-destructive",
     strokeColor: "hsl(0 72% 55%)",
     bgGlow: "bg-destructive/5",
+    chip: "bg-destructive/10 text-destructive",
   },
 };
 
-const severityColors = {
-  low: "bg-neon-green",
-  medium: "bg-warning",
-  high: "bg-destructive",
-};
+// Map full Android permission strings to short, friendly labels
+const prettifyPerm = (p: string) => p.replace(/^android\.permission\./, "");
 
-const ScanResult = ({ result, fileName, onScanAnother }: ScanResultProps) => {
-  const config = levelConfig[result.status];
+const ScanResult = ({ verdict, aiExplanation, fileName, onScanAnother }: ScanResultProps) => {
+  const config = levelConfig[verdict.level];
   const circumference = 2 * Math.PI * 45;
-  const fillAmount = (result.score / 10) * circumference;
+  const fillAmount = (verdict.score / 100) * circumference;
+  const flagged = verdict.detection.malicious + verdict.detection.suspicious;
 
   return (
     <section className="pt-32 pb-20 relative">
@@ -72,58 +82,44 @@ const ScanResult = ({ result, fileName, onScanAnother }: ScanResultProps) => {
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className={`text-4xl font-bold font-mono ${config.color}`}>{result.score}</span>
-              <span className="text-xs text-muted-foreground font-mono">/10 RISK</span>
+              <span className={`text-4xl font-bold font-mono ${config.color}`}>{verdict.score}</span>
+              <span className="text-xs text-muted-foreground font-mono">/100 RISK</span>
             </div>
           </div>
 
           <div className={`inline-flex items-center gap-2 ${config.color} font-bold text-lg tracking-wider`}>
             <config.icon className="h-5 w-5" />
-            {config.label}
+            {verdict.label}
           </div>
+          <p className="text-sm text-muted-foreground mt-2">{verdict.summary}</p>
           <p className="text-xs text-muted-foreground font-mono mt-3 truncate">TARGET: {fileName}</p>
+
+          {/* Detection ratio */}
+          <div className="mt-5 pt-5 border-t border-border/30 flex items-center justify-center gap-6 text-xs font-mono">
+            <div>
+              <div className={`text-2xl font-bold ${flagged >= 4 ? config.color : "text-foreground"}`}>
+                {flagged}<span className="text-muted-foreground text-sm">/{verdict.detection.total}</span>
+              </div>
+              <div className="text-[10px] text-muted-foreground uppercase mt-1">Engines flagged</div>
+            </div>
+            <div className="h-10 w-px bg-border" />
+            <div>
+              <div className="text-2xl font-bold text-destructive">{verdict.detection.malicious}</div>
+              <div className="text-[10px] text-muted-foreground uppercase mt-1">Malicious</div>
+            </div>
+            <div className="h-10 w-px bg-border" />
+            <div>
+              <div className="text-2xl font-bold text-warning">{verdict.detection.suspicious}</div>
+              <div className="text-[10px] text-muted-foreground uppercase mt-1">Suspicious</div>
+            </div>
+          </div>
         </motion.div>
 
-        {/* Findings */}
+        {/* AI Explanation - the big "এই অ্যাপটা কী কী নিয়ে ফেলতে চাচ্ছে?" */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="glass rounded-2xl p-6 mb-6"
-        >
-          <h3 className="font-semibold mb-4 flex items-center gap-2 text-sm font-mono uppercase tracking-wider">
-            <AlertTriangle className="h-4 w-4 text-warning" />
-            Security Findings ({result.reasons.length})
-          </h3>
-          <div className="space-y-3">
-            {result.reasons.map((reason, i) => (
-              <motion.div
-                key={reason.text}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 + i * 0.1 }}
-                className="flex items-center gap-3 glass rounded-xl px-4 py-3 group hover:border-neon-green/20 transition-all duration-300"
-              >
-                <span className={`w-2 h-2 rounded-full shrink-0 ${severityColors[reason.severity]}`} />
-                <span className="text-sm text-muted-foreground flex-1">{reason.text}</span>
-                <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded-full ${
-                  reason.severity === "high" ? "bg-destructive/10 text-destructive" :
-                  reason.severity === "medium" ? "bg-warning/10 text-warning" :
-                  "bg-neon-green/10 text-neon-green"
-                }`}>
-                  {reason.severity}
-                </span>
-                <ChevronRight className="h-3 w-3 text-muted-foreground/50 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* AI Explanation */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
           className="glass rounded-2xl p-6 mb-6"
         >
           <div className="flex items-center gap-2 mb-4">
@@ -131,14 +127,85 @@ const ScanResult = ({ result, fileName, onScanAnother }: ScanResultProps) => {
               <Bot className="h-4 w-4 text-neon-green" />
             </div>
             <div>
-              <span className="text-sm font-semibold">AI Analysis</span>
-              <span className="text-[10px] text-muted-foreground ml-2 font-mono">CLIENT-SIDE SCAN</span>
+              <span className="text-sm font-semibold">AI বিশ্লেষণ</span>
+              <span className="text-[10px] text-muted-foreground ml-2 font-mono">CONSERVATIVE • EVIDENCE-BASED</span>
             </div>
           </div>
           <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
-            <p className="text-sm text-muted-foreground leading-relaxed">{result.explanations}</p>
+            <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap">{aiExplanation}</p>
           </div>
         </motion.div>
+
+        {/* Dangerous Permissions */}
+        {(verdict.dangerousPermissions.length > 0 || verdict.mediumPermissions.length > 0) && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45 }}
+            className="glass rounded-2xl p-6 mb-6"
+          >
+            <h3 className="font-semibold mb-4 flex items-center gap-2 text-sm font-mono uppercase tracking-wider">
+              <KeyRound className="h-4 w-4 text-warning" />
+              Permissions ({verdict.dangerousPermissions.length + verdict.mediumPermissions.length})
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {verdict.dangerousPermissions.map((p) => (
+                <span key={p} className="text-[11px] font-mono px-2.5 py-1 rounded-full bg-destructive/10 text-destructive border border-destructive/20">
+                  {prettifyPerm(p)}
+                </span>
+              ))}
+              {verdict.mediumPermissions.map((p) => (
+                <span key={p} className="text-[11px] font-mono px-2.5 py-1 rounded-full bg-warning/10 text-warning border border-warning/20">
+                  {prettifyPerm(p)}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Detected Engines */}
+        {verdict.detection.engines.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.55 }}
+            className="glass rounded-2xl p-6 mb-6"
+          >
+            <h3 className="font-semibold mb-4 flex items-center gap-2 text-sm font-mono uppercase tracking-wider">
+              <AlertTriangle className="h-4 w-4 text-destructive" />
+              Detected by ({verdict.detection.engines.length})
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {verdict.detection.engines.map((e) => (
+                <span key={e} className={`text-[11px] font-mono px-2.5 py-1 rounded-full ${config.chip} border border-current/20`}>
+                  {e}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Suspicious URLs */}
+        {verdict.suspiciousUrls.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.65 }}
+            className="glass rounded-2xl p-6 mb-6"
+          >
+            <h3 className="font-semibold mb-4 flex items-center gap-2 text-sm font-mono uppercase tracking-wider">
+              <Link2 className="h-4 w-4 text-warning" />
+              Embedded URLs ({verdict.suspiciousUrls.length})
+            </h3>
+            <div className="space-y-2">
+              {verdict.suspiciousUrls.map((u) => (
+                <div key={u} className="text-xs font-mono text-muted-foreground bg-muted/30 rounded-lg px-3 py-2 truncate border border-border/50">
+                  {u}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
         {/* Scan another */}
         <motion.button
@@ -151,7 +218,7 @@ const ScanResult = ({ result, fileName, onScanAnother }: ScanResultProps) => {
           className="w-full py-4 rounded-xl font-semibold glass text-foreground hover:border-neon-green/30 transition-all duration-300 flex items-center justify-center gap-2"
         >
           <ArrowLeft className="h-4 w-4" />
-          Scan Another File
+          আরেকটা ফাইল স্ক্যান করো
         </motion.button>
       </div>
     </section>
