@@ -33,7 +33,7 @@ const HeroSection = ({ onFileSelect }: { onFileSelect: (file: File) => void }) =
           className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-8 text-xs font-mono text-neon-green"
         >
           <span className="w-2 h-2 rounded-full bg-neon-green animate-pulse" />
-          SYSTEM ONLINE • v2.4.1
+          SYSTEM ONLINE
         </motion.div>
 
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.1] tracking-tight">
