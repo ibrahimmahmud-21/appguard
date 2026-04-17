@@ -47,18 +47,15 @@ const UploadBox = ({ onFileSelect }: UploadBoxProps) => {
   return (
     <div className="max-w-xl mx-auto">
       <motion.div
-        animate={isDragging ? { scale: 1.02 } : { scale: 1 }}
+        animate={isDragging ? { scale: 1.01 } : { scale: 1 }}
         className="relative"
       >
-        {/* Outer glow ring */}
-        <div className={`absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-neon-green/20 via-transparent to-neon-blue/20 transition-opacity duration-500 ${isDragging ? 'opacity-100' : 'opacity-40'}`} />
-        
         <div
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
-          className={`relative glass rounded-2xl p-10 text-center transition-all duration-500 cursor-pointer overflow-hidden ${
-            isDragging ? "glow-green-intense" : ""
+          className={`relative rounded-2xl p-10 text-center transition-all duration-300 cursor-pointer overflow-hidden border bg-card/40 ${
+            isDragging ? "border-neon-green/60 glow-green-soft" : "border-border/60 hover:border-neon-green/30"
           }`}
         >
           {/* Scan line effect when dragging */}
@@ -134,18 +131,15 @@ const UploadBox = ({ onFileSelect }: UploadBoxProps) => {
       </motion.div>
 
       <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: selectedFile ? 1.01 : 1 }}
+        whileTap={{ scale: selectedFile ? 0.99 : 1 }}
         onClick={handleScan}
         disabled={!selectedFile}
-        className="mt-6 w-full py-4 rounded-xl font-bold text-primary-foreground bg-primary disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-300 glow-green animate-pulse-glow relative overflow-hidden group"
+        className="btn-shine mt-5 w-full py-3.5 rounded-xl font-semibold text-primary-foreground bg-primary disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed transition-all duration-300 enabled:glow-green enabled:hover:shadow-[0_0_0_1px_hsl(142_70%_48%/0.4),0_12px_40px_-8px_hsl(142_70%_48%/0.5)]"
       >
-        <span className="relative z-10 flex items-center justify-center gap-2 text-lg">
-          {selectedFile ? "⚡ Initiate Scan" : "Select a file to scan"}
+        <span className="relative z-10 flex items-center justify-center gap-2 text-base">
+          {selectedFile ? "Initiate Scan" : "Select a file to scan"}
         </span>
-        {selectedFile && (
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" style={{ backgroundSize: "200% 100%" }} />
-        )}
       </motion.button>
     </div>
   );

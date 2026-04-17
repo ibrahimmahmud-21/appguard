@@ -4,54 +4,57 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
+/*
+ * apkguard — Minimal black/white + green accent theme
+ * Pure dark base, single neon-green accent, subtle interactions.
+ */
+
 @layer base {
   :root {
-    --background: 220 20% 4%;
-    --foreground: 210 20% 92%;
+    --background: 0 0% 4%;
+    --foreground: 0 0% 96%;
 
-    --card: 220 18% 8%;
-    --card-foreground: 210 20% 92%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 96%;
 
-    --popover: 220 18% 8%;
-    --popover-foreground: 210 20% 92%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 96%;
 
-    --primary: 142 72% 50%;
-    --primary-foreground: 220 20% 4%;
+    --primary: 142 70% 48%;
+    --primary-foreground: 0 0% 4%;
 
-    --secondary: 200 100% 50%;
-    --secondary-foreground: 220 20% 4%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 96%;
 
-    --muted: 220 16% 12%;
-    --muted-foreground: 215 15% 55%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 200 100% 50%;
-    --accent-foreground: 220 20% 4%;
+    --accent: 142 70% 48%;
+    --accent-foreground: 0 0% 4%;
 
     --destructive: 0 72% 55%;
-    --destructive-foreground: 210 20% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 220 16% 14%;
-    --input: 220 16% 14%;
-    --ring: 142 72% 50%;
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
+    --ring: 142 70% 48%;
 
     --radius: 0.75rem;
 
-    --neon-green: 142 72% 50%;
-    --neon-blue: 200 100% 50%;
-    --neon-green-glow: 0 0 20px hsl(142 72% 50% / 0.4);
-    --neon-blue-glow: 0 0 20px hsl(200 100% 50% / 0.4);
-    --surface-elevated: 220 18% 10%;
-    --warning: 38 92% 50%;
-    --warning-foreground: 220 20% 4%;
+    --neon-green: 142 70% 48%;
+    --neon-blue: 142 70% 48%;
+    --surface-elevated: 0 0% 9%;
+    --warning: 38 92% 55%;
+    --warning-foreground: 0 0% 4%;
 
-    --sidebar-background: 220 18% 8%;
-    --sidebar-foreground: 210 20% 92%;
-    --sidebar-primary: 142 72% 50%;
-    --sidebar-primary-foreground: 220 20% 4%;
-    --sidebar-accent: 220 16% 12%;
-    --sidebar-accent-foreground: 210 20% 92%;
-    --sidebar-border: 220 16% 14%;
-    --sidebar-ring: 142 72% 50%;
+    --sidebar-background: 0 0% 7%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 142 70% 48%;
+    --sidebar-primary-foreground: 0 0% 4%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 0 0% 14%;
+    --sidebar-ring: 142 70% 48%;
   }
 }
 
@@ -60,110 +63,91 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  ::selection {
+    background: hsl(142 70% 48% / 0.3);
+    color: hsl(0 0% 98%);
   }
 }
 
 @layer utilities {
+  /* Subtle green glow — minimal, not flashy */
   .glow-green {
-    box-shadow: 0 0 20px hsl(142 72% 50% / 0.3), 0 0 60px hsl(142 72% 50% / 0.1);
+    box-shadow: 0 0 0 1px hsl(142 70% 48% / 0.2), 0 8px 30px -8px hsl(142 70% 48% / 0.35);
   }
-  .glow-blue {
-    box-shadow: 0 0 20px hsl(200 100% 50% / 0.3), 0 0 60px hsl(200 100% 50% / 0.1);
-  }
-  .glow-green-intense {
-    box-shadow: 0 0 20px hsl(142 72% 50% / 0.4), 0 0 60px hsl(142 72% 50% / 0.2), 0 0 100px hsl(142 72% 50% / 0.1);
+  .glow-green-soft {
+    box-shadow: 0 0 24px -6px hsl(142 70% 48% / 0.25);
   }
   .text-glow-green {
-    text-shadow: 0 0 20px hsl(142 72% 50% / 0.5), 0 0 40px hsl(142 72% 50% / 0.2);
-  }
-  .text-glow-blue {
-    text-shadow: 0 0 20px hsl(200 100% 50% / 0.5), 0 0 40px hsl(200 100% 50% / 0.2);
+    text-shadow: 0 0 24px hsl(142 70% 48% / 0.35);
   }
 
-  /* Glassmorphism */
+  /* Clean glass — subtle, not aggressive */
   .glass {
-    background: hsl(220 18% 8% / 0.6);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsl(220 16% 20% / 0.4);
+    background: hsl(0 0% 7% / 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid hsl(0 0% 100% / 0.06);
   }
   .glass-strong {
-    background: hsl(220 18% 8% / 0.8);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border: 1px solid hsl(220 16% 24% / 0.5);
-  }
-  .glass-green {
-    background: hsl(142 72% 50% / 0.05);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsl(142 72% 50% / 0.15);
-  }
-  .glass-blue {
-    background: hsl(200 100% 50% / 0.05);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsl(200 100% 50% / 0.15);
+    background: hsl(0 0% 7% / 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid hsl(0 0% 100% / 0.08);
   }
 
-  /* Gradient border */
-  .gradient-border {
-    border: 1px solid transparent;
-    background-clip: padding-box;
-    position: relative;
+  /* Hairline minimal grid */
+  .cyber-grid {
+    background-image:
+      linear-gradient(hsl(0 0% 100% / 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(0 0% 100% / 0.025) 1px, transparent 1px);
+    background-size: 56px 56px;
   }
-  .gradient-border::before {
+
+  /* Smooth button shine on hover */
+  .btn-shine {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-shine::after {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, hsl(142 72% 50%), hsl(200 100% 50%));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
+    background: linear-gradient(120deg, transparent 30%, hsl(0 0% 100% / 0.08) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+  .btn-shine:hover::after {
+    transform: translateX(100%);
   }
 
-  /* Cyber grid background */
-  .cyber-grid {
-    background-image:
-      linear-gradient(hsl(142 72% 50% / 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(142 72% 50% / 0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
+  /* Hover lift utility */
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
   }
 }
 
-/* Animated background grid */
-@keyframes grid-scroll {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(40px); }
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
 }
 
-/* Floating particles */
-@keyframes float-particle {
-  0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }
 
-/* Radar sweep */
-@keyframes radar-sweep {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Scan pulse */
 @keyframes scan-pulse {
-  0% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.05); opacity: 1; }
-  100% { transform: scale(1); opacity: 0.8; }
-}
-
-/* Risk meter fill */
-@keyframes meter-fill {
-  0% { stroke-dashoffset: 283; }
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.04); opacity: 1; }
 }

@@ -5,68 +5,60 @@ const features = [
   {
     icon: KeyRound,
     title: "Permission Analysis",
-    description: "Detects dangerous permissions like camera, SMS, contacts access that apps shouldn't need.",
-    color: "text-neon-green",
-    glow: "group-hover:glow-green",
+    description: "Detects dangerous permissions like camera, SMS, and contacts access that apps shouldn't need.",
   },
   {
     icon: Globe,
     title: "URL Detection",
     description: "Scans for suspicious URLs, tracking endpoints, and known malicious domains embedded in the APK.",
-    color: "text-neon-blue",
-    glow: "group-hover:glow-blue",
   },
   {
     icon: BarChart3,
     title: "Risk Scoring",
-    description: "Calculates a comprehensive risk score based on multiple threat vectors and behavioral patterns.",
-    color: "text-neon-green",
-    glow: "group-hover:glow-green",
+    description: "Calculates a clear risk score based on multiple threat vectors and behavioral patterns.",
   },
   {
     icon: MessageSquareText,
     title: "AI Explanations",
     description: "Get clear, human-readable explanations of every risk — no technical jargon required.",
-    color: "text-neon-blue",
-    glow: "group-hover:glow-blue",
   },
 ];
 
 const FeaturesSection = () => (
   <section id="features" className="py-24 relative">
-    <div className="absolute inset-0 cyber-grid opacity-50" />
     <div className="container relative z-10">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-center mb-16"
+        transition={{ duration: 0.5 }}
+        className="text-center mb-14"
       >
-        <span className="text-xs font-mono text-neon-green tracking-widest uppercase mb-4 block">
-          // capabilities
+        <span className="text-[11px] font-mono text-neon-green/80 tracking-[0.2em] uppercase mb-4 block">
+          Capabilities
         </span>
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          What We <span className="text-neon-green text-glow-green">Detect</span>
+        <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
+          What We <span className="text-neon-green">Detect</span>
         </h2>
         <p className="text-muted-foreground max-w-md mx-auto text-sm">
-          Multi-vector threat analysis engine scanning APK files across every dimension.
+          Multi-vector threat analysis scanning APK files across every dimension.
         </p>
       </motion.div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
         {features.map((f, i) => (
           <motion.div
             key={f.title}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
-            className={`group glass rounded-2xl p-6 transition-all duration-500 hover:scale-[1.02] ${f.glow}`}
+            transition={{ delay: i * 0.08, duration: 0.4 }}
+            className="group relative rounded-xl border border-border/60 bg-card/40 p-6 hover-lift hover:border-neon-green/40 transition-all duration-300"
           >
-            <div className={`w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center mb-4 border border-border/50 group-hover:border-transparent transition-colors ${f.color}`}>
-              <f.icon className="h-5 w-5" />
+            <div className="w-10 h-10 rounded-lg bg-neon-green/10 border border-neon-green/20 flex items-center justify-center mb-4 group-hover:bg-neon-green/15 transition-colors">
+              <f.icon className="h-4.5 w-4.5 text-neon-green" strokeWidth={2} />
             </div>
-            <h3 className="text-base font-semibold mb-2">{f.title}</h3>
+            <h3 className="text-base font-semibold mb-2 tracking-tight">{f.title}</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">{f.description}</p>
           </motion.div>
         ))}
