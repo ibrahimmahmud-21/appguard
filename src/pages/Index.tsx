@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
@@ -113,27 +114,51 @@ const Index = () => {
     <div className="min-h-screen relative">
       <ParticleBackground />
       <Navbar />
-      {view === "scanning" ? (
-        <ScanningAnimation
-          fileName={fileName}
-          phase={phase}
-          uploadProgress={uploadProgress}
-          onComplete={handleScanComplete}
-        />
-      ) : view === "result" && verdict ? (
-        <ScanResult
-          verdict={verdict}
-          aiExplanation={aiExplanation}
-          fileName={fileName}
-          onScanAnother={handleScanAnother}
-        />
-      ) : (
-        <>
-          <HeroSection onFileSelect={handleFileSelect} />
-          <FeaturesSection />
-          <HowItWorks />
-        </>
-      )}
+      <AnimatePresence mode="wait">
+        {view === "scanning" ? (
+          <motion.div
+            key="scanning"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <ScanningAnimation
+              fileName={fileName}
+              phase={phase}
+              uploadProgress={uploadProgress}
+              onComplete={handleScanComplete}
+            />
+          </motion.div>
+        ) : view === "result" && verdict ? (
+          <motion.div
+            key="result"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <ScanResult
+              verdict={verdict}
+              aiExplanation={aiExplanation}
+              fileName={fileName}
+              onScanAnother={handleScanAnother}
+            />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="home"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <HeroSection onFileSelect={handleFileSelect} />
+            <FeaturesSection />
+            <HowItWorks />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <Footer />
     </div>
   );

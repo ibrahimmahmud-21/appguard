@@ -35,13 +35,17 @@ const HowItWorks = () => (
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
-            transition={{ delay: i * 0.12, duration: 0.5, ease: "easeOut" }}
+            transition={{ delay: i * 0.12, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="text-center relative group"
           >
             <div className="relative w-20 h-20 mx-auto mb-5">
-              <div className="w-full h-full rounded-2xl bg-card border border-border flex items-center justify-center group-hover:border-primary/40 group-hover:bg-primary/5 group-hover:scale-105 transition-all duration-300">
+              <motion.div
+                whileHover={{ scale: 1.06, rotate: -3 }}
+                transition={{ type: "spring", stiffness: 300, damping: 16 }}
+                className="w-full h-full rounded-2xl bg-card border border-border flex items-center justify-center group-hover:border-primary/40 group-hover:bg-primary/5"
+              >
                 <s.icon className="h-7 w-7 text-primary" strokeWidth={1.8} />
-              </div>
+              </motion.div>
               <span className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-md bg-primary text-primary-foreground text-[10px] font-mono font-bold flex items-center justify-center shadow-[0_4px_12px_-2px_hsl(152_100%_45%/0.5)]">
                 {s.num}
               </span>

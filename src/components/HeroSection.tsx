@@ -19,26 +19,36 @@ const HeroSection = ({ onFileSelect }: { onFileSelect: (file: File) => void }) =
 
     <div className="container relative z-10">
       <motion.div
-        initial={{ opacity: 0, y: 16, rotate: -1 }}
-        animate={{ opacity: 1, y: 0, rotate: 0 }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="text-center max-w-3xl mx-auto mb-12"
       >
         <motion.span
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
+          transition={{ delay: 0.1, duration: 0.5, ease: "easeOut" }}
           className="inline-block text-[11px] font-mono uppercase tracking-[0.2em] text-primary/90 mb-5"
         >
           Android Security Scanner
         </motion.span>
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.05] tracking-tight">
+        <motion.h1
+          initial={{ opacity: 0, y: 18, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.05] tracking-tight"
+        >
           Scan APK Before{" "}
           <span className="text-primary text-glow-green">You Install</span>
-        </h1>
-        <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.35, ease: "easeOut" }}
+          className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed"
+        >
           Upload any Android APK and instantly detect malware, suspicious permissions, and hidden risks — before it touches your device.
-        </p>
+        </motion.p>
       </motion.div>
 
       <motion.div
