@@ -86,19 +86,19 @@ const ScanningAnimation = ({ fileName, phase, uploadProgress, onComplete }: Scan
           <p className="font-mono text-xs text-muted-foreground mb-4 truncate">{fileName}</p>
 
           {/* Progress bar */}
-          <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden mb-3 relative">
+          <div className="w-full h-2 bg-muted rounded-full overflow-hidden mb-3 relative">
             <motion.div
-              className="h-full bg-gradient-to-r from-neon-green to-neon-blue rounded-full"
+              className="h-full bg-primary rounded-full shadow-[0_0_12px_hsl(152_100%_45%/0.5)]"
               animate={{ width: `${displayProgress}%` }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             />
             {phase === "scanning" && (
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer"
                 style={{ backgroundSize: "200% 100%" }} />
             )}
           </div>
 
-          <p className="font-mono text-sm text-neon-green text-glow-green">
+          <p className="font-mono text-sm text-primary text-glow-green">
             {phase === "uploading"
               ? `${Math.round(uploadProgress)}%`
               : phase === "done"
