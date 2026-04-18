@@ -11,7 +11,7 @@ const ParticleBackground = () => {
 
     let animationId: number;
     const particles: Array<{
-      x: number; y: number; vx: number; vy: number; size: number; opacity: number; color: string;
+      x: number; y: number; vx: number; vy: number; size: number; opacity: number;
     }> = [];
 
     const resize = () => {
@@ -21,16 +21,15 @@ const ParticleBackground = () => {
     resize();
     window.addEventListener("resize", resize);
 
-    // Create particles
-    for (let i = 0; i < 60; i++) {
+    // Lower particle density for clean light aesthetic
+    for (let i = 0; i < 40; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        size: Math.random() * 2 + 0.5,
-        opacity: Math.random() * 0.5 + 0.1,
-        color: Math.random() > 0.5 ? "142, 72%, 50%" : "200, 100%, 50%",
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        size: Math.random() * 1.5 + 0.5,
+        opacity: Math.random() * 0.25 + 0.05,
       });
     }
 
@@ -45,19 +44,19 @@ const ParticleBackground = () => {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${p.color}, ${p.opacity})`;
+        ctx.fillStyle = `hsla(152, 100%, 38%, ${p.opacity})`;
         ctx.fill();
 
-        // Draw connections
+        // Connections — very subtle on light bg
         for (let j = i + 1; j < particles.length; j++) {
           const dx = p.x - particles[j].x;
           const dy = p.y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 150) {
+          if (dist < 140) {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `hsla(${p.color}, ${0.05 * (1 - dist / 150)})`;
+            ctx.strokeStyle = `hsla(152, 100%, 38%, ${0.06 * (1 - dist / 140)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -78,7 +77,7 @@ const ParticleBackground = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-0"
-      style={{ opacity: 0.6 }}
+      style={{ opacity: 0.5 }}
     />
   );
 };

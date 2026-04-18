@@ -23,23 +23,23 @@ interface ScanResultProps {
 const levelConfig = {
   LOW: {
     icon: ShieldCheck,
-    color: "text-neon-green",
-    strokeColor: "hsl(142 72% 50%)",
-    bgGlow: "bg-neon-green/5",
-    chip: "bg-neon-green/10 text-neon-green",
+    color: "text-primary",
+    strokeColor: "hsl(152 100% 38%)",
+    bgGlow: "bg-primary/8",
+    chip: "bg-primary/10 text-primary",
   },
   MEDIUM: {
     icon: ShieldAlert,
     color: "text-warning",
-    strokeColor: "hsl(38 92% 50%)",
-    bgGlow: "bg-warning/5",
+    strokeColor: "hsl(38 92% 48%)",
+    bgGlow: "bg-warning/8",
     chip: "bg-warning/10 text-warning",
   },
   HIGH: {
     icon: ShieldX,
     color: "text-destructive",
-    strokeColor: "hsl(0 72% 55%)",
-    bgGlow: "bg-destructive/5",
+    strokeColor: "hsl(0 72% 50%)",
+    bgGlow: "bg-destructive/8",
     chip: "bg-destructive/10 text-destructive",
   },
 };
@@ -67,7 +67,7 @@ const ScanResult = ({ verdict, aiExplanation, fileName, onScanAnother }: ScanRes
         >
           <div className="relative w-48 h-48 mx-auto mb-6">
             <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-              <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(220 16% 14%)" strokeWidth="3" />
+              <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(0 0% 90%)" strokeWidth="3" />
               <motion.circle
                 cx="50" cy="50" r="45"
                 fill="none"
@@ -123,8 +123,8 @@ const ScanResult = ({ verdict, aiExplanation, fileName, onScanAnother }: ScanRes
           className="glass rounded-2xl p-6 mb-6"
         >
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-lg bg-neon-green/10 flex items-center justify-center">
-              <Bot className="h-4 w-4 text-neon-green" />
+            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Bot className="h-4 w-4 text-primary" />
             </div>
             <div>
               <span className="text-sm font-semibold">AI বিশ্লেষণ</span>
@@ -215,7 +215,7 @@ const ScanResult = ({ verdict, aiExplanation, fileName, onScanAnother }: ScanRes
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={onScanAnother}
-          className="w-full py-4 rounded-xl font-semibold glass text-foreground hover:border-neon-green/30 transition-all duration-300 flex items-center justify-center gap-2"
+          className="w-full py-4 rounded-xl font-semibold glass text-foreground hover:border-primary/40 transition-all duration-300 flex items-center justify-center gap-2"
         >
           <ArrowLeft className="h-4 w-4" />
           আরেকটা ফাইল স্ক্যান করো

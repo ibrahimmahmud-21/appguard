@@ -56,17 +56,17 @@ const ScanningAnimation = ({ fileName, phase, uploadProgress, onComplete }: Scan
         >
           {/* Scan line */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-neon-green to-transparent animate-scan-line" />
+            <div className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent animate-scan-line" />
           </div>
 
           {/* Radar */}
           <div className="relative w-40 h-40 mx-auto mb-6">
             <svg viewBox="0 0 100 100" className="w-full h-full">
-              <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(142 72% 50% / 0.1)" strokeWidth="0.5" />
-              <circle cx="50" cy="50" r="30" fill="none" stroke="hsl(142 72% 50% / 0.1)" strokeWidth="0.5" />
-              <circle cx="50" cy="50" r="15" fill="none" stroke="hsl(142 72% 50% / 0.1)" strokeWidth="0.5" />
-              <line x1="50" y1="5" x2="50" y2="95" stroke="hsl(142 72% 50% / 0.08)" strokeWidth="0.5" />
-              <line x1="5" y1="50" x2="95" y2="50" stroke="hsl(142 72% 50% / 0.08)" strokeWidth="0.5" />
+              <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(152 100% 38% / 0.15)" strokeWidth="0.5" />
+              <circle cx="50" cy="50" r="30" fill="none" stroke="hsl(152 100% 38% / 0.15)" strokeWidth="0.5" />
+              <circle cx="50" cy="50" r="15" fill="none" stroke="hsl(152 100% 38% / 0.15)" strokeWidth="0.5" />
+              <line x1="50" y1="5" x2="50" y2="95" stroke="hsl(152 100% 38% / 0.1)" strokeWidth="0.5" />
+              <line x1="5" y1="50" x2="95" y2="50" stroke="hsl(152 100% 38% / 0.1)" strokeWidth="0.5" />
             </svg>
             <motion.div
               className="absolute inset-0"
@@ -76,29 +76,29 @@ const ScanningAnimation = ({ fileName, phase, uploadProgress, onComplete }: Scan
             >
               <div
                 className="absolute top-1/2 left-1/2 w-1/2 h-[2px] origin-left"
-                style={{ background: "linear-gradient(90deg, hsl(142 72% 50% / 0.8), transparent)" }}
+                style={{ background: "linear-gradient(90deg, hsl(152 100% 38% / 0.85), transparent)" }}
               />
             </motion.div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-neon-green glow-green" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-primary glow-green" />
           </div>
 
           <p className="text-sm font-semibold text-foreground mb-1 px-2">{headline}</p>
           <p className="font-mono text-xs text-muted-foreground mb-4 truncate">{fileName}</p>
 
           {/* Progress bar */}
-          <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden mb-3 relative">
+          <div className="w-full h-2 bg-muted rounded-full overflow-hidden mb-3 relative">
             <motion.div
-              className="h-full bg-gradient-to-r from-neon-green to-neon-blue rounded-full"
+              className="h-full bg-primary rounded-full shadow-[0_0_12px_hsl(152_100%_45%/0.5)]"
               animate={{ width: `${displayProgress}%` }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             />
             {phase === "scanning" && (
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer"
                 style={{ backgroundSize: "200% 100%" }} />
             )}
           </div>
 
-          <p className="font-mono text-sm text-neon-green text-glow-green">
+          <p className="font-mono text-sm text-primary text-glow-green">
             {phase === "uploading"
               ? `${Math.round(uploadProgress)}%`
               : phase === "done"
