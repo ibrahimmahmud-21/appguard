@@ -52,12 +52,17 @@ const FeaturesSection = () => (
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
-            transition={{ delay: i * 0.08, duration: 0.5, ease: "easeOut" }}
-            className="group relative rounded-xl border border-border bg-card p-6 hover-lift hover:border-primary/40 transition-all duration-300"
+            transition={{ delay: i * 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            whileHover={{ y: -4 }}
+            className="group relative rounded-xl border border-border bg-card p-6 hover:border-primary/40 hover:shadow-[0_14px_36px_-18px_hsl(152_100%_45%/0.35)] transition-all duration-300"
           >
-            <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center mb-4 group-hover:bg-primary/15 group-hover:scale-110 transition-all duration-300">
+            <motion.div
+              whileHover={{ rotate: 8, scale: 1.12 }}
+              transition={{ type: "spring", stiffness: 320, damping: 18 }}
+              className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center mb-4 group-hover:bg-primary/15"
+            >
               <f.icon className="h-4.5 w-4.5 text-primary" strokeWidth={2} />
-            </div>
+            </motion.div>
             <h3 className="text-base font-semibold mb-2 tracking-tight">{f.title}</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">{f.description}</p>
           </motion.div>

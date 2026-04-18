@@ -131,11 +131,23 @@ const UploadBox = ({ onFileSelect }: UploadBoxProps) => {
       </motion.div>
 
       <motion.button
-        whileHover={{ scale: selectedFile ? 1.02 : 1 }}
-        whileTap={{ scale: selectedFile ? 0.98 : 1 }}
+        whileHover={selectedFile ? { scale: 1.02, y: -1 } : undefined}
+        whileTap={selectedFile ? { scale: 0.98 } : undefined}
+        animate={
+          selectedFile
+            ? {
+                boxShadow: [
+                  "0 0 0 1px hsl(152 100% 45% / 0.3), 0 8px 24px -8px hsl(152 100% 45% / 0.35)",
+                  "0 0 0 1px hsl(152 100% 45% / 0.55), 0 14px 40px -8px hsl(152 100% 45% / 0.6)",
+                  "0 0 0 1px hsl(152 100% 45% / 0.3), 0 8px 24px -8px hsl(152 100% 45% / 0.35)",
+                ],
+              }
+            : undefined
+        }
+        transition={{ duration: 2.4, repeat: selectedFile ? Infinity : 0, ease: "easeInOut" }}
         onClick={handleScan}
         disabled={!selectedFile}
-        className="btn-shine mt-5 w-full py-3.5 rounded-xl font-semibold text-primary-foreground bg-primary disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed transition-all duration-300 enabled:glow-green enabled:hover:shadow-[0_0_0_1px_hsl(152_100%_45%/0.4),0_14px_44px_-8px_hsl(152_100%_45%/0.55)]"
+        className="btn-shine mt-5 w-full py-3.5 rounded-xl font-semibold text-primary-foreground bg-primary disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed transition-colors duration-300"
       >
         <span className="relative z-10 flex items-center justify-center gap-2 text-base">
           {selectedFile ? "Initiate Scan" : "Select a file to scan"}
